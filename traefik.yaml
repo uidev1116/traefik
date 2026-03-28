@@ -1,0 +1,21 @@
+api:
+  insecure: true
+
+providers:
+  docker:
+    exposedByDefault: true
+    defaultRule: "Host(`{{ index .Labels \"com.docker.compose.service\" }}.{{ index .Labels \"com.docker.compose.project\" }}.localhost`)"
+  file:
+    directory: /etc/traefik/dynamic   # TLS設定を動的に読み込む
+    watch: true
+
+entrypoints:
+  web:
+    address: ":80"
+    http:
+      redirections:
+        entrypoint:
+          to: websecure                # ← HTTPは自動でHTTPSにリダイレクト
+          scheme: https
+  websecure:
+    address: ":443"

@@ -1,0 +1,19 @@
+services:
+  traefik:
+    image: traefik:v3
+    ports:
+      - "80:80"
+      - "443:443"       # ← 追加
+      - "8080:8080"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./traefik.yaml:/etc/traefik/traefik.yaml        # ← 追加
+      - ./dynamic:/etc/traefik/dynamic                  # ← 追加
+      - ./certs:/etc/traefik/certs                      # ← 追加
+    networks:
+      - traefik
+
+networks:
+  traefik:
+    name: traefik
+    external: true
